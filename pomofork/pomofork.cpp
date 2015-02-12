@@ -3,11 +3,10 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
-#include <map>
+#include <ctime>
 
 using namespace std;
 
-#define TOTAL_TIME 60
 #define MAX_OUTPUT 1024
 
 void run(string query, char* output){
@@ -27,23 +26,28 @@ void run(string query, char* output){
 int main( int argc, char *argv[] )
 {
 	char r[MAX_OUTPUT];
-
-	FILE *fp = fopen("stats", "w+");
-	if(!fp) return 0;
 	
-	map<string, int> stats;
-	int seconds = 0;
-	while(seconds < TOTAL_TIME){
+	while(1){
 		run("getactivewindow", r);
 		run(string("getwindowname ") + r, r);
 		string window(r);
-		stats[window]++;
+		FILE *fp = fopen("stats", "a+");
+		if(!fp) return 0;
 		fprintf(fp, "%s", r);
+		fclose(fp);
 		sleep(1);
-		seconds++;
+		time_t now = time(0);
+		tm *ltm = localtime(&now);
+		//cout << "Year: "<< 1900 + ltm->tm_year << endl;
+		//cout << "Month: "<< 1 + ltm->tm_mon<< endl;
+		//cout << "Day: "<<  ltm->tm_mday << endl;
+		//cout << "Time: "<< 1 + ltm->tm_hour << ":";
+		//cout << 1 + ltm->tm_min << ":";
+		//cout << 1 + ltm->tm_sec << endl;
+		//if(ltm->tm_min == 49)
+		//	break;
 	}
 
-	fclose(fp);
 
 	return 0;
 }
