@@ -4,6 +4,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <ctime>
+#include <string.h>
 
 using namespace std;
 
@@ -33,19 +34,18 @@ int main( int argc, char *argv[] )
 		string window(r);
 		FILE *fp = fopen("stats", "a+");
 		if(!fp) return 0;
+		time_t now = time(0);
+		tm *ltm = localtime(&now);
+		fprintf(fp, "%d/%d/%d-%d:%d:%d ", 
+				(ltm->tm_mday),
+				(1 + ltm->tm_mon),
+				(1900 + ltm->tm_year),
+				(1 + ltm->tm_hour),
+				(1 + ltm->tm_min),
+				(ltm->tm_sec));
 		fprintf(fp, "%s", r);
 		fclose(fp);
 		sleep(1);
-		time_t now = time(0);
-		tm *ltm = localtime(&now);
-		//cout << "Year: "<< 1900 + ltm->tm_year << endl;
-		//cout << "Month: "<< 1 + ltm->tm_mon<< endl;
-		//cout << "Day: "<<  ltm->tm_mday << endl;
-		//cout << "Time: "<< 1 + ltm->tm_hour << ":";
-		//cout << 1 + ltm->tm_min << ":";
-		//cout << 1 + ltm->tm_sec << endl;
-		//if(ltm->tm_min == 49)
-		//	break;
 	}
 
 
